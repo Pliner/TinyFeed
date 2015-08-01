@@ -6,7 +6,6 @@ using System.Web.Http.Description;
 using System.Web.Http.ExceptionHandling;
 using AspNet.WebApi.HtmlMicrodataFormatter;
 using Autofac;
-using Common.Logging;
 using Microsoft.Owin.Diagnostics;
 using Microsoft.Owin.Extensions;
 using Microsoft.Owin.Infrastructure;
@@ -14,6 +13,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Owin;
+using TinyFeed.Core;
 using TinyFeed.Filters;
 using TinyFeed.MessageHandlers;
 
@@ -21,8 +21,6 @@ namespace TinyFeed
 {
     public class Startup
     {
-        private static readonly ILog Log = LogManager.GetLogger<Startup>();
-
         private readonly ManualResetEventSlim shutdownSignal = new ManualResetEventSlim(false);
 
         private INuGetWebApiSettings Settings { get; set; }
@@ -68,6 +66,16 @@ namespace TinyFeed
             app.UseStageMarker(PipelineStage.MapHandler);
 
             RegisterServices(container, app, config);
+
+            CreateScheme();
+        }
+
+        private static void CreateScheme()
+        {
+            using (var context = new TinyFeedContext())
+            {
+                context.Initialize();
+            }
         }
 
         protected virtual HttpConfiguration CreateHttpConfiguration()

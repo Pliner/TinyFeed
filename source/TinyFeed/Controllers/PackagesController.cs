@@ -52,7 +52,7 @@ namespace TinyFeed.Controllers
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(DispositionTypeNames.Attachment)
             {
                 FileName = string.Format("{0}.{1}{2}", package.Id, package.Version, Constants.PackageExtension),
-                CreationDate = package.Created,                                                                 
+                CreationDate = package.LastUpdated,                                                                 
                 ModificationDate = package.LastUpdated
             };
 

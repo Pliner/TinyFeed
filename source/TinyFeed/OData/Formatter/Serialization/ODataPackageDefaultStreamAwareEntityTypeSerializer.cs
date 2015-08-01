@@ -6,13 +6,13 @@ using TinyFeed.Models;
 
 namespace TinyFeed.OData.Formatter.Serialization
 {
-    public class ODataPackageDefaultStreamAwareEntityTypeSerializer : DefaultStreamAwareEntityTypeSerializer<ODataPackage>
+    public class ODataPackageDefaultStreamAwareEntityTypeSerializer : DefaultStreamAwareEntityTypeSerializer<V2FeedPackage>
     {
         public ODataPackageDefaultStreamAwareEntityTypeSerializer(ODataSerializerProvider serializerProvider) : base(serializerProvider)
         {
         }
 
-        public override Uri BuildLinkForStreamProperty(ODataPackage package, EntityInstanceContext context)
+        public override Uri BuildLinkForStreamProperty(V2FeedPackage package, EntityInstanceContext context)
         {
             var url = new UrlHelper(context.Request);
             var routeParams = new { package.Id, package.Version };

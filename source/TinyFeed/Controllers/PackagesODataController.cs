@@ -19,15 +19,14 @@ namespace TinyFeed.Controllers
         }
 
         [EnableQuery(PageSize = 20, HandleNullPropagation = HandleNullPropagationOption.False)]
-        public IQueryable<ODataPackage> Get()
+        public IQueryable<V2FeedPackage> Get()
         {
-            return packageService.GetPackages().Select(x => new ODataPackage
+            return packageService.GetPackages().Select(x => new V2FeedPackage
             {
                 Id = x.Id,
                 Version = x.Version,
                 Tags = x.Tags,
                 Title = x.Title,
-                DisplayTitle = x.DisplayTitle,
                 IsLatestVersion = x.IsLatestVersion,
                 LastUpdated = x.LastUpdated,
                 Created = x.Created,
@@ -38,30 +37,34 @@ namespace TinyFeed.Controllers
                 Copyright = x.Copyright,
                 Dependencies = x.Dependencies,
                 Description = x.Description,
-                DevelopmentDependency = x.DevelopmentDependency,
                 DownloadCount = x.DownloadCount,
                 IconUrl = x.IconUrl,
-                Language = x.Language,
                 LicenseUrl = x.LicenseUrl,
-                Listed = x.Listed,
-                Owners = x.Owners,
                 PackageSize = x.PackageSize,
                 ProjectUrl = x.ProjectUrl,
                 ReleaseNotes = x.ReleaseNotes,
                 RequireLicenseAcceptance = x.RequireLicenseAcceptance,
-                Score = x.Score,
                 Summary = x.Summary,
-                VersionDownloadCount = x.VersionDownloadCount
+                VersionDownloadCount = x.VersionDownloadCount,
+                IsAbsoluteLatestVersion = x.IsAbsoluteLatestVersion,
+                IsPrerelease = x.IsPrerelease,
+                DisplayTitle = x.DisplayTitle,
+                DevelopmentDependency = x.DevelopmentDependency,
+                Owners = x.Owners,
+                Language = x.Language,
+                Listed = x.Listed,
+                Score = x.Score,
+                
             });
         }
 
         [HttpPost]
         [HttpGet]
-        public IEnumerable<ODataPackage> Search(
+        public IEnumerable<V2FeedPackage> Search(
             [FromODataUri] string searchTerm,
             [FromODataUri] string targetFramework,
             [FromODataUri] bool includePrerelease,
-            ODataQueryOptions<ODataPackage> options)
+            ODataQueryOptions<V2FeedPackage> options)
         {
             throw new NotImplementedException();
         }

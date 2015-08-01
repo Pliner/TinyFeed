@@ -24,8 +24,6 @@
             public const string Delete = "NuGetClient.Redirect.Delete";
         }
 
-        public const string Sources = "Sources";
-
         public const string TabCompletionPackageIds = "Package Manager Console Tab Completion - Package IDs";
         public const string TabCompletionPackageVersions = "Package Manager Console Tab Completion - Package Versions";
     }

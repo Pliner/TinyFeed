@@ -23,9 +23,10 @@ namespace TinyFeed
             builder.RegisterInstance(settings).As<INuGetWebApiSettings>();
 
             var routeMapper = new NuGetWebApiRouteMapper(settings.RoutePathPrefix);
-            builder.Register(x => new TinyFeedPackageService()).As<ITinyFeedPackageService>();
             builder.RegisterInstance(routeMapper);
 
+            builder.Register(x => new TinyFeedContext()).As<ITinyFeedContext>().InstancePerRequest();
+            builder.Register(x => new TinyFeedPackageService(x.Resolve<ITinyFeedContext>())).As<ITinyFeedPackageService>();
 
             builder.RegisterApiControllers(typeof (NuGetWebApiModule).Assembly);
         }

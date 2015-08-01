@@ -6,6 +6,13 @@ namespace TinyFeed.Core
 {
     public class TinyFeedPackageService : ITinyFeedPackageService
     {
+        private readonly ITinyFeedContext context;
+
+        public TinyFeedPackageService(ITinyFeedContext context)
+        {
+            this.context = context;
+        }
+
         public void AddPackage(Stream stream)
         {
             throw new NotImplementedException();
@@ -23,7 +30,7 @@ namespace TinyFeed.Core
 
         public IQueryable<TinyFeedPackage> GetPackages()
         {
-            throw new NotImplementedException();
+            return context.Packages;
         }
 
         public Stream GetStream(string id, string version)
