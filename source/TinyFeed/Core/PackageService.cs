@@ -14,15 +14,18 @@ namespace TinyFeed.Core
 
         public void Add(Package package)
         {
+            var existedPackage = context.Packages.SingleOrDefault(x => x.Id == package.Id && x.Version == package.Version);
+            if (existedPackage != null)
+                return;
+
             foreach (var p in context.Packages.Where(x => x.Id == package.Id))
             {
                 p.IsLatestVersion = false;
                 p.IsAbsoluteLatestVersion = false;
             }
 
-            var latestPackage = context.Packages.Where(x => x.Id == package.Id)
-                .ToArray()
-                .DefaultIfEmpty(package)
+            var latestPackage = context.Packages.Where(x => x.Id == package.Id).ToArray()
+                .Concat(new[] {package})
                 .OrderBy(x => new SemanticVersion(x.Version))
                 .First();
             

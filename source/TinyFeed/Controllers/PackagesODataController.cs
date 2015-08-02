@@ -73,7 +73,8 @@ namespace TinyFeed.Controllers
         [EnableQuery(PageSize = 100, HandleNullPropagation = HandleNullPropagationOption.False)]
         public IHttpActionResult FindPackagesById([FromODataUri] string id)
         {
-            return Ok(packageService.FindLatestPackage(id));
+            var package = packageService.FindLatestPackage(id);
+            return Ok(package);
         }
 
         [HttpPost]

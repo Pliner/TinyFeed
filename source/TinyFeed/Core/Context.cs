@@ -14,7 +14,8 @@ namespace TinyFeed.Core
             Database.SetInitializer<Context>(null);
         }
 
-        public Context() : base("Context")
+        public Context()
+            : base("SQLite")
         {
             number = Interlocked.Increment(ref total);
         }

@@ -15,6 +15,8 @@ namespace TinyFeed.Core
         {
             var fullBlobPath = GetFullBlobPath(blobPath);
             EnsureDirectoryExists(fullBlobPath);
+            if (File.Exists(fullBlobPath))
+                return;
             using (var fileStream = File.OpenWrite(fullBlobPath))
                 fileStream.Write(bytes, 0, bytes.Length);
         }
