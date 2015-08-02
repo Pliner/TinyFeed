@@ -1,59 +1,57 @@
 using System;
 using Autofac;
-using Common.Logging;
 using Microsoft.Owin.Hosting;
 using Owin;
+using Topshelf;
 
 namespace TinyFeed
 {
-    public class EntryPoint : IDisposable
+    public class EntryPoint
     {
+        private readonly object startStopLock = new object();
+
         private CustomStartup startup;
         private IDisposable webapp;
 
-        static void Main()
+        public static void Main()
         {
-            var log = LogManager.GetCurrentClassLogger();
-
-            try
+            HostFactory.Run(x =>
             {
-                using (var program = new EntryPoint())
+                x.SetServiceName("TinyFeed");
+                x.SetDescription("TinyFeed");
+                x.SetDisplayName("TinyFeed");
+                x.Service<EntryPoint>(c =>
                 {
-                    program.Start();
-                    Console.WriteLine("Listening on " + program.BaseAddress + ". Press <ctrl>+c to stop listening.");
-                    Console.WriteLine("Press enter to stop.");
-                    Console.ReadLine();
+                    c.ConstructUsing(f => new EntryPoint());
+                    c.WhenStarted(e => e.Start());
+                    c.WhenStopped(e => e.Stop());
+                });
+            });
+        }
+
+        private void Start()
+        {
+            lock (startStopLock)
+            {
+                webapp = WebApp.Start("http://*:9002/", WebAppStartup);
+            }
+        }
+
+        private void Stop()
+        {
+            lock (startStopLock)
+            {
+                if (webapp != null)
+                {
+                    webapp.Dispose();
+                    webapp = null;
                 }
-            }
-            catch (Exception ex)
-            {
-                log.Fatal(m => m(ex.Message), ex);
-            }
 
-            Console.WriteLine("Press enter to exit.");
-            Console.ReadLine();
-        }
-
-        public void Start(string baseAddress = "http://*:9002/")
-        {
-            BaseAddress = baseAddress;
-            webapp = WebApp.Start(baseAddress, WebAppStartup);
-        }
-
-        public string BaseAddress { get; private set; }
-
-        public void Dispose()
-        {
-            if (webapp != null)
-            {
-                webapp.Dispose();
-                webapp = null;
-            }
-
-            if (startup != null)
-            {
-                startup.WaitForShutdown(TimeSpan.FromMinutes(1));
-                startup = null;
+                if (startup != null)
+                {
+                    startup.WaitForShutdown(TimeSpan.FromSeconds(5));
+                    startup = null;
+                }
             }
         }
 
@@ -73,9 +71,9 @@ namespace TinyFeed
             return startup.CreateDefaultContainer(app);
         }
 
-        class CustomStartup : Startup
+        private class CustomStartup : Startup
         {
-            readonly EntryPoint entryPoint;
+            private readonly EntryPoint entryPoint;
 
             public CustomStartup(EntryPoint entryPoint)
             {
