@@ -3,24 +3,24 @@ using NuGet;
 
 namespace TinyFeed.Core
 {
-    public class TinyFeedPackageBuilder : ITinyFeedPackageBuilder
+    public class PackageBuilder : IPackageBuilder
     {
         private readonly ICryptoService cryptoService;
         private readonly IDateTimeService dateTimeService;
 
-        public TinyFeedPackageBuilder(ICryptoService cryptoService, IDateTimeService dateTimeService)
+        public PackageBuilder(ICryptoService cryptoService, IDateTimeService dateTimeService)
         {
             this.cryptoService = cryptoService;
             this.dateTimeService = dateTimeService;
         }
 
-        public TinyFeedPackage Build(byte[] bytes)
+        public Package Build(byte[] bytes)
         {
             using (var stream = new MemoryStream(bytes))
             {
                 var package = new ZipPackage(stream);
                 var now = dateTimeService.UtcNow;
-                return new TinyFeedPackage
+                return new Package
                 {
                     Id = package.Id,
                     Version = package.Version.ToString(),

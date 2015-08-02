@@ -3,28 +3,28 @@ using System.Threading;
 
 namespace TinyFeed.Core
 {
-    public class TinyFeedContext : DbContext, ITinyFeedContext
+    public class Context : DbContext, IContext
     {
         private static int total;
 
         private readonly int number;
 
-        static TinyFeedContext()
+        static Context()
         {
-            Database.SetInitializer<TinyFeedContext>(null);
+            Database.SetInitializer<Context>(null);
         }
 
-        public TinyFeedContext() : base("TinyFeedContext")
+        public Context() : base("Context")
         {
             number = Interlocked.Increment(ref total);
         }
 
-        public IDbSet<TinyFeedPackage> Packages { get; set; }
+        public IDbSet<Package> Packages { get; set; }
         
         public void Initialize()
         {
             Database.CreateIfNotExists();
-            Database.ExecuteSqlCommand(@"CREATE TABLE IF NOT EXISTS TinyFeedPackages(
+            Database.ExecuteSqlCommand(@"CREATE TABLE IF NOT EXISTS Packages(
                     [Id] [nvarchar](64) NOT NULL,
                     [Version] [nvarchar](64) NOT NULL,
                     [Title] [nvarchar](64) NOT NULL,
@@ -57,16 +57,16 @@ namespace TinyFeed.Core
                     [VersionDownloadCount] [int] NOT NULL,
                     [Score] [float] NOT NULL,
                  
-                    CONSTRAINT PK_TinyFeedPackages PRIMARY KEY ([Id], [Version]),
-                    CONSTRAINT UK_TinyFeedPackages_Id_Version_IsLatestVersion UNIQUE([Id], [Version], [IsLatestVersion])
+                    CONSTRAINT PK_Packages PRIMARY KEY ([Id], [Version]),
+                    CONSTRAINT UK_Packages_Id_Version_IsLatestVersion UNIQUE([Id], [Version], [IsLatestVersion])
                 )");
 
-            Database.ExecuteSqlCommand(@"CREATE INDEX IF NOT EXISTS IX_TinyFeedPackages_IsLatestVersion ON TinyFeedPackages (`IsLatestVersion` ASC);");
+            Database.ExecuteSqlCommand(@"CREATE INDEX IF NOT EXISTS IX_Packages_IsLatestVersion ON Packages (`IsLatestVersion` ASC);");
         }
 
         public override string ToString()
         {
-            return "TinyFeed" + number;
+            return "Context-" + number;
         }
     }
 }

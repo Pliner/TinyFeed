@@ -1,16 +1,16 @@
 using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Services.Common;
 
-namespace TinyFeed.Core
+namespace TinyFeed.Models
 {
-    [Table("TinyFeedPackages")]
-    public class TinyFeedPackage
+    [EntityPropertyMapping("Id", SyndicationItemProperty.Title, SyndicationTextContentKind.Plaintext, false)]
+    [EntityPropertyMapping("Authors", SyndicationItemProperty.AuthorName, SyndicationTextContentKind.Plaintext, false)]
+    [EntityPropertyMapping("LastUpdated", SyndicationItemProperty.Updated, SyndicationTextContentKind.Plaintext, false)]
+    [EntityPropertyMapping("Summary", SyndicationItemProperty.Summary, SyndicationTextContentKind.Plaintext, false)]
+    public class ODataPackage
     {
-        [Column(Order = 0), Key]
         public string Id { get; set; }
 
-        [Column(Order = 1), Key]
         public string Version { get; set; }
 
         public string Title { get; set; }

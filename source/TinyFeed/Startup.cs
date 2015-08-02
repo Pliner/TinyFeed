@@ -72,7 +72,7 @@ namespace TinyFeed
 
         private static void CreateScheme()
         {
-            using (ITinyFeedContext context = new TinyFeedContext())
+            using (IContext context = new Context())
             {
                 context.Initialize();
             }

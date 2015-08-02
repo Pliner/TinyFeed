@@ -2,11 +2,11 @@ using System.IO;
 
 namespace TinyFeed.Core
 {
-    public class TinyFeedBlobService : ITinyFeedBlobService
+    public class BlobService : IBlobService
     {
         private readonly string baseBlobPath;
 
-        public TinyFeedBlobService(string baseBlobPath)
+        public BlobService(string baseBlobPath)
         {
             this.baseBlobPath = baseBlobPath;
         }
@@ -34,6 +34,5 @@ namespace TinyFeed.Core
         {
             return Path.Combine(baseBlobPath, blobPath);
         }
-
     }
 }

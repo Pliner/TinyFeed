@@ -26,7 +26,7 @@ namespace TinyFeed
         {
             var builder = new ODataConventionModelBuilder();
 
-            var entity = builder.EntitySet<TinyFeedODataPackage>("Packages");
+            var entity = builder.EntitySet<ODataPackage>("Packages");
             entity.EntityType.HasKey(pkg => pkg.Id);
             entity.EntityType.HasKey(pkg => pkg.Version);
 
@@ -34,11 +34,11 @@ namespace TinyFeed
             searchAction.Parameter<string>("searchTerm");
             searchAction.Parameter<string>("targetFramework");
             searchAction.Parameter<bool>("includePrerelease");
-            searchAction.ReturnsCollectionFromEntitySet<TinyFeedODataPackage>("Packages");
+            searchAction.ReturnsCollectionFromEntitySet<ODataPackage>("Packages");
 
             var findPackagesAction = builder.Action("FindPackagesById");
             findPackagesAction.Parameter<string>("id");
-            findPackagesAction.ReturnsCollectionFromEntitySet<TinyFeedODataPackage>("Packages");
+            findPackagesAction.ReturnsCollectionFromEntitySet<ODataPackage>("Packages");
 
             var getUpdatesAction = builder.Action("GetUpdates");
             getUpdatesAction.Parameter<string>("packageIds");
@@ -46,10 +46,10 @@ namespace TinyFeed
             getUpdatesAction.Parameter<bool>("includeAllVersions");
             getUpdatesAction.Parameter<string>("targetFrameworks");
             getUpdatesAction.Parameter<string>("versionConstraints");
-            getUpdatesAction.ReturnsCollectionFromEntitySet<TinyFeedODataPackage>("Packages");
+            getUpdatesAction.ReturnsCollectionFromEntitySet<ODataPackage>("Packages");
 
             model = builder.GetEdmModel();
-            model.SetHasDefaultStream(model.FindDeclaredType(typeof(TinyFeedODataPackage).FullName) as IEdmEntityType, hasStream: true);
+            model.SetHasDefaultStream(model.FindDeclaredType(typeof(ODataPackage).FullName) as IEdmEntityType, hasStream: true);
         }
     }
 }

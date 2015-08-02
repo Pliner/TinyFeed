@@ -11,17 +11,17 @@ namespace TinyFeed.Controllers
 {
     public class PackagesODataController : ODataController
     {
-        private readonly ITinyFeedPackageService packageService;
+        private readonly IPackageService packageService;
 
-        public PackagesODataController(ITinyFeedPackageService packageService)
+        public PackagesODataController(IPackageService packageService)
         {
             this.packageService = packageService;
         }
 
         [EnableQuery(PageSize = 20, HandleNullPropagation = HandleNullPropagationOption.False)]
-        public IQueryable<TinyFeedODataPackage> Get()
+        public IQueryable<ODataPackage> Get()
         {
-            return packageService.GetPackages().Select(x => new TinyFeedODataPackage
+            return packageService.GetPackages().Select(x => new ODataPackage
             {
                 Id = x.Id,
                 Version = x.Version,
@@ -59,11 +59,11 @@ namespace TinyFeed.Controllers
 
         [HttpPost]
         [HttpGet]
-        public IEnumerable<TinyFeedODataPackage> Search(
+        public IEnumerable<ODataPackage> Search(
             [FromODataUri] string searchTerm,
             [FromODataUri] string targetFramework,
             [FromODataUri] bool includePrerelease,
-            ODataQueryOptions<TinyFeedODataPackage> options)
+            ODataQueryOptions<ODataPackage> options)
         {
             throw new NotImplementedException();
         }

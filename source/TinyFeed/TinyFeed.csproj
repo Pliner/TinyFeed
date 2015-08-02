@@ -73,10 +73,6 @@
       <HintPath>..\..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>True</Private>
@@ -190,18 +186,18 @@
     <Compile Include="Core\DateTimeService.cs" />
     <Compile Include="Core\ICryptoService.cs" />
     <Compile Include="Core\IDateTimeService.cs" />
-    <Compile Include="Core\ITinyFeedBlobService.cs" />
-    <Compile Include="Core\ITinyFeedContext.cs" />
-    <Compile Include="Core\ITinyFeedPackageBuilder.cs" />
-    <Compile Include="Core\ITinyFeedPackageService.cs" />
+    <Compile Include="Core\IBlobService.cs" />
+    <Compile Include="Core\IContext.cs" />
+    <Compile Include="Core\IPackageBuilder.cs" />
+    <Compile Include="Core\IPackageService.cs" />
     <Compile Include="Core\PackageExtentions.cs" />
-    <Compile Include="Core\TinyFeedBlobService.cs" />
-    <Compile Include="Core\TinyFeedContext.cs" />
-    <Compile Include="Core\TinyFeedPackage.cs" />
-    <Compile Include="Core\TinyFeedPackageBuilder.cs" />
-    <Compile Include="Core\TinyFeedPackageService.cs" />
+    <Compile Include="Core\BlobService.cs" />
+    <Compile Include="Core\Context.cs" />
+    <Compile Include="Core\Package.cs" />
+    <Compile Include="Core\PackageBuilder.cs" />
+    <Compile Include="Core\PackageService.cs" />
     <Compile Include="INuGetWebApiSettings.cs" />
-    <Compile Include="Models\TinyFeedODataPackage.cs" />
+    <Compile Include="Models\ODataPackage.cs" />
     <Compile Include="NuGetUserAgentConstraint.cs" />
     <Compile Include="NuGetWebApiModule.cs" />
     <Compile Include="Controllers\PackagesController.cs" />

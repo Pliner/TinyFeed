@@ -7,6 +7,7 @@ using System.Net.Mime;
 using System.Web.Http;
 using NuGet;
 using TinyFeed.Core;
+using IPackageBuilder = TinyFeed.Core.IPackageBuilder;
 
 namespace TinyFeed.Controllers
 {
@@ -15,13 +16,13 @@ namespace TinyFeed.Controllers
     /// </summary>
     public class PackagesController : ApiController
     {
-        private readonly ITinyFeedPackageBuilder packageBuilder;
-        private readonly ITinyFeedPackageService packageService;
-        private readonly ITinyFeedBlobService blobService;
+        private readonly IPackageBuilder packageBuilder;
+        private readonly IPackageService packageService;
+        private readonly IBlobService blobService;
 
-        public PackagesController(ITinyFeedPackageBuilder packageBuilder, 
-                                  ITinyFeedPackageService packageService, 
-                                  ITinyFeedBlobService blobService)
+        public PackagesController(IPackageBuilder packageBuilder, 
+                                  IPackageService packageService, 
+                                  IBlobService blobService)
         {
             this.packageBuilder = packageBuilder;
             this.packageService = packageService;
@@ -45,7 +46,7 @@ namespace TinyFeed.Controllers
 
             if (Request.Method == HttpMethod.Get)
             {
-                response.Content = new StreamContent(blobService.Download(package.Id + "/" + package.Version));
+                response.Content = new StreamContent(blobService.Download(GetFilepath(package)));
             }
             else
             {
@@ -57,12 +58,17 @@ namespace TinyFeed.Controllers
             response.Content.Headers.LastModified = package.LastUpdated;
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(DispositionTypeNames.Attachment)
             {
-                FileName = string.Format("{0}.{1}{2}", package.Id, package.Version, Constants.PackageExtension),
+                FileName = GetFilepath(package),
                 CreationDate = package.LastUpdated,                                                                 
                 ModificationDate = package.LastUpdated
             };
 
             return response;
+        }
+
+        private static string GetFilepath(Package package)
+        {
+            return Path.Combine(package.Id, string.Format("{0}.{1}{2}", package.Id, package.Version, Constants.PackageExtension));
         }
 
         /// <summary>
@@ -90,13 +96,13 @@ namespace TinyFeed.Controllers
                     {
                         var bytes = fileStream.ReadAllBytes();
                         var package = packageBuilder.Build(bytes);
-                        blobService.Upload(Path.Combine(package.Id, package.Id + "." + package.Version + ".nupkg"), bytes);
+                        blobService.Upload(GetFilepath(package), bytes);
                         packageService.Add(package);
                     }
                 }
                 return new HttpResponseMessage(HttpStatusCode.OK);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError);
             }

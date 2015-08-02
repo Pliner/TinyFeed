@@ -2,7 +2,7 @@
 
 namespace TinyFeed.Core
 {
-    public interface ITinyFeedBlobService
+    public interface IBlobService
     {
         void Upload(string blobPath, byte[] bytes);
         Stream Download(string blobPath);

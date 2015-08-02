@@ -3,9 +3,9 @@ using System.Data.Entity;
 
 namespace TinyFeed.Core
 {
-    public interface ITinyFeedContext : IDisposable
+    public interface IContext : IDisposable
     {
-        IDbSet<TinyFeedPackage> Packages { get; }
+        IDbSet<Package> Packages { get; }
         int SaveChanges();
         void Initialize();
     }
