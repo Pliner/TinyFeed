@@ -186,13 +186,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\PackagesODataController.cs" />
+    <Compile Include="Core\CryptoService.cs" />
+    <Compile Include="Core\DateTimeService.cs" />
+    <Compile Include="Core\ICryptoService.cs" />
+    <Compile Include="Core\IDateTimeService.cs" />
+    <Compile Include="Core\ITinyFeedBlobService.cs" />
     <Compile Include="Core\ITinyFeedContext.cs" />
+    <Compile Include="Core\ITinyFeedPackageBuilder.cs" />
     <Compile Include="Core\ITinyFeedPackageService.cs" />
+    <Compile Include="Core\PackageExtentions.cs" />
+    <Compile Include="Core\TinyFeedBlobService.cs" />
     <Compile Include="Core\TinyFeedContext.cs" />
     <Compile Include="Core\TinyFeedPackage.cs" />
+    <Compile Include="Core\TinyFeedPackageBuilder.cs" />
     <Compile Include="Core\TinyFeedPackageService.cs" />
     <Compile Include="INuGetWebApiSettings.cs" />
-    <Compile Include="Models\V2FeedPackage.cs" />
+    <Compile Include="Models\TinyFeedODataPackage.cs" />
     <Compile Include="NuGetUserAgentConstraint.cs" />
     <Compile Include="NuGetWebApiModule.cs" />
     <Compile Include="Controllers\PackagesController.cs" />

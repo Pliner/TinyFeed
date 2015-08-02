@@ -7,8 +7,6 @@ namespace TinyFeed.Core
     [Table("TinyFeedPackages")]
     public class TinyFeedPackage
     {
-        #region package properties
-
         [Column(Order = 0), Key]
         public string Id { get; set; }
 
@@ -72,7 +70,5 @@ namespace TinyFeed.Core
         public int VersionDownloadCount { get; set; }
 
         public float Score { get; set; }
-
-        #endregion
     }
 }

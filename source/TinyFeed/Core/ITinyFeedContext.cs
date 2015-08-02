@@ -1,8 +1,9 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 
 namespace TinyFeed.Core
 {
-    public interface ITinyFeedContext
+    public interface ITinyFeedContext : IDisposable
     {
         IDbSet<TinyFeedPackage> Packages { get; }
         int SaveChanges();

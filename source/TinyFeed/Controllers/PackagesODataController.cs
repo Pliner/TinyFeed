@@ -19,9 +19,9 @@ namespace TinyFeed.Controllers
         }
 
         [EnableQuery(PageSize = 20, HandleNullPropagation = HandleNullPropagationOption.False)]
-        public IQueryable<V2FeedPackage> Get()
+        public IQueryable<TinyFeedODataPackage> Get()
         {
-            return packageService.GetPackages().Select(x => new V2FeedPackage
+            return packageService.GetPackages().Select(x => new TinyFeedODataPackage
             {
                 Id = x.Id,
                 Version = x.Version,
@@ -54,17 +54,16 @@ namespace TinyFeed.Controllers
                 Language = x.Language,
                 Listed = x.Listed,
                 Score = x.Score,
-                
             });
         }
 
         [HttpPost]
         [HttpGet]
-        public IEnumerable<V2FeedPackage> Search(
+        public IEnumerable<TinyFeedODataPackage> Search(
             [FromODataUri] string searchTerm,
             [FromODataUri] string targetFramework,
             [FromODataUri] bool includePrerelease,
-            ODataQueryOptions<V2FeedPackage> options)
+            ODataQueryOptions<TinyFeedODataPackage> options)
         {
             throw new NotImplementedException();
         }

@@ -15,11 +15,17 @@ namespace TinyFeed.Controllers
     /// </summary>
     public class PackagesController : ApiController
     {
+        private readonly ITinyFeedPackageBuilder packageBuilder;
         private readonly ITinyFeedPackageService packageService;
+        private readonly ITinyFeedBlobService blobService;
 
-        public PackagesController(ITinyFeedPackageService packageService)
+        public PackagesController(ITinyFeedPackageBuilder packageBuilder, 
+                                  ITinyFeedPackageService packageService, 
+                                  ITinyFeedBlobService blobService)
         {
+            this.packageBuilder = packageBuilder;
             this.packageService = packageService;
+            this.blobService = blobService;
         }
 
         /// <summary>
@@ -39,7 +45,7 @@ namespace TinyFeed.Controllers
 
             if (Request.Method == HttpMethod.Get)
             {
-                response.Content = new StreamContent(packageService.GetStream(package.Id, package.Version));
+                response.Content = new StreamContent(blobService.Download(package.Id + "/" + package.Version));
             }
             else
             {
@@ -80,9 +86,12 @@ namespace TinyFeed.Controllers
 
                 foreach (var file in provider.FileData)
                 {
-                    using (var stream = File.OpenRead(file.LocalFileName))
+                    using (var fileStream = new FileStream(file.LocalFileName, FileMode.Open, FileAccess.Read, FileShare.Read, 1024 * 1024))
                     {
-                        packageService.AddPackage(stream);
+                        var bytes = fileStream.ReadAllBytes();
+                        var package = packageBuilder.Build(bytes);
+                        blobService.Upload(Path.Combine(package.Id, package.Id + "." + package.Version + ".nupkg"), bytes);
+                        packageService.Add(package);
                     }
                 }
                 return new HttpResponseMessage(HttpStatusCode.OK);

@@ -7,7 +7,7 @@ namespace TinyFeed.Models
     [EntityPropertyMapping("Authors", SyndicationItemProperty.AuthorName, SyndicationTextContentKind.Plaintext, false)]
     [EntityPropertyMapping("LastUpdated", SyndicationItemProperty.Updated, SyndicationTextContentKind.Plaintext, false)]
     [EntityPropertyMapping("Summary", SyndicationItemProperty.Summary, SyndicationTextContentKind.Plaintext, false)]
-    public class V2FeedPackage
+    public class TinyFeedODataPackage
     {
         public string Id { get; set; }
 

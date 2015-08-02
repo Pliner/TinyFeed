@@ -1,41 +1,35 @@
-﻿using System;
-using System.IO;
-using System.Linq;
+﻿using System.Linq;
 
 namespace TinyFeed.Core
 {
     public class TinyFeedPackageService : ITinyFeedPackageService
     {
         private readonly ITinyFeedContext context;
-
+        
         public TinyFeedPackageService(ITinyFeedContext context)
         {
             this.context = context;
         }
 
-        public void AddPackage(Stream stream)
+        public void Add(TinyFeedPackage package)
         {
-            throw new NotImplementedException();
+            context.Packages.Add(package);
+            context.SaveChanges();
         }
 
         public TinyFeedPackage FindLatestPackage(string id)
         {
-            throw new NotImplementedException();
+            return context.Packages.FirstOrDefault(x => x.Id == id && x.IsLatestVersion && x.IsAbsoluteLatestVersion);
         }
 
         public TinyFeedPackage FindPackage(string id, string version)
         {
-            throw new NotImplementedException();
+            return context.Packages.FirstOrDefault(x => x.Id == id && x.Version == version);
         }
 
         public IQueryable<TinyFeedPackage> GetPackages()
         {
             return context.Packages;
-        }
-
-        public Stream GetStream(string id, string version)
-        {
-            throw new NotImplementedException();
         }
     }
 }
