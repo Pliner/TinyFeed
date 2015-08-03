@@ -184,6 +184,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Version.cs">
+      <Link>Properties\Version.cs</Link>
+    </Compile>
     <Compile Include="Controllers\PackagesODataController.cs" />
     <Compile Include="Core\CryptoService.cs" />
     <Compile Include="Core\DateTimeService.cs" />
