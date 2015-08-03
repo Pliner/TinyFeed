@@ -1,0 +1,18 @@
+﻿<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>TinyFeed</id>
+    <title>TinyFeed</title>
+    <version>$version$</version>
+    <authors>Yury Pliner</authors>
+    <owners>Yury Pliner</owners>
+    <licenseUrl>https://github.com/Pliner/TinyFeed</licenseUrl>
+    <projectUrl>https://github.com/Pliner/TinyFeed</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Very simple implementation of Nuget feed</description>
+    <releaseNotes></releaseNotes>
+  </metadata>
+  <files>
+    <file src="bin\**\*.*" />
+  </files>
+</package>

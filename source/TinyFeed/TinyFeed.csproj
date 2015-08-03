@@ -240,6 +240,7 @@
       <IsTransformFile>True</IsTransformFile>
     </None>
     <None Include="Properties\SlowCheetah\SlowCheetah.Transforms.targets" />
+    <None Include="TinyFeed.nuspec" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
