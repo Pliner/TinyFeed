@@ -50,5 +50,10 @@ namespace TinyFeed.Core
         {
             return context.Packages;
         }
+
+        public IQueryable<Package> FindPackagesById(string id)
+        {
+            return context.Packages.Where(x => x.Id == id);
+        }
     }
 }

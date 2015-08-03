@@ -8,5 +8,6 @@ namespace TinyFeed.Core
         Package FindLatestPackage(string id);
         Package FindPackage(string id, string version);
         IQueryable<Package> GetPackages();
+        IQueryable<Package> FindPackagesById(string id);
     }
 }

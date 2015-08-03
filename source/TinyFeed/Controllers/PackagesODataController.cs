@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web.Http;
 using System.Web.Http.OData;
 using System.Web.Http.OData.Query;
@@ -21,7 +21,20 @@ namespace TinyFeed.Controllers
         [EnableQuery(PageSize = 20, HandleNullPropagation = HandleNullPropagationOption.False)]
         public IQueryable<ODataPackage> Get()
         {
-            return packageService.GetPackages().Select(x => new ODataPackage
+            return packageService.GetPackages().Select(ToOData());
+        }
+
+        [HttpPost]
+        [HttpGet]
+        [EnableQuery(PageSize = 100, HandleNullPropagation = HandleNullPropagationOption.False)]
+        public IHttpActionResult FindPackagesById([FromODataUri] string id)
+        {
+            return Ok(packageService.FindPackagesById(id).Select(ToOData()));
+        }
+
+        private static Expression<Func<Package, ODataPackage>> ToOData()
+        {
+            return x => new ODataPackage
             {
                 Id = x.Id,
                 Version = x.Version,
@@ -54,41 +67,7 @@ namespace TinyFeed.Controllers
                 Language = x.Language,
                 Listed = x.Listed,
                 Score = x.Score,
-            });
-        }
-
-        [HttpPost]
-        [HttpGet]
-        public IEnumerable<ODataPackage> Search(
-            [FromODataUri] string searchTerm,
-            [FromODataUri] string targetFramework,
-            [FromODataUri] bool includePrerelease,
-            ODataQueryOptions<ODataPackage> options)
-        {
-            throw new NotImplementedException();
-        }
-
-        [HttpPost]
-        [HttpGet]
-        [EnableQuery(PageSize = 100, HandleNullPropagation = HandleNullPropagationOption.False)]
-        public IHttpActionResult FindPackagesById([FromODataUri] string id)
-        {
-            var package = packageService.FindLatestPackage(id);
-            return Ok(package);
-        }
-
-        [HttpPost]
-        [HttpGet]
-        [EnableQuery(PageSize = 100, HandleNullPropagation = HandleNullPropagationOption.False)]
-        public IHttpActionResult GetUpdates(
-            [FromODataUri] string packageIds,
-            [FromODataUri] string versions,
-            [FromODataUri] bool includePrerelease,
-            [FromODataUri] bool includeAllVersions,
-            [FromODataUri] string targetFrameworks,
-            [FromODataUri] string versionConstraints)
-        {
-            throw new NotImplementedException();
+            };
         }
     }
 }
