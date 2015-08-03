@@ -32,6 +32,11 @@ namespace TinyFeed.Core
             return File.OpenRead(GetFullBlobPath(blobPath));
         }
 
+        public bool HasBlob(string blobPath)
+        {
+            return File.Exists(blobPath);
+        }
+
         private string GetFullBlobPath(string blobPath)
         {
             return Path.Combine(baseBlobPath, blobPath);

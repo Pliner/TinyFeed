@@ -58,8 +58,8 @@ namespace TinyFeed.Controllers
             response.Content.Headers.LastModified = package.LastUpdated;
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(DispositionTypeNames.Attachment)
             {
-                FileName = GetFilepath(package),
-                CreationDate = package.LastUpdated,                                                                 
+                FileName = GeFilename(package),
+                CreationDate = package.Created,                                                                 
                 ModificationDate = package.LastUpdated
             };
 
@@ -68,7 +68,12 @@ namespace TinyFeed.Controllers
 
         private static string GetFilepath(Package package)
         {
-            return Path.Combine(package.Id, string.Format("{0}.{1}{2}", package.Id, package.Version, Constants.PackageExtension));
+            return Path.Combine(package.Id, GeFilename(package));
+        }
+
+        private static string GeFilename(Package package)
+        {
+            return string.Format("{0}.{1}{2}", package.Id, package.Version, Constants.PackageExtension);
         }
 
         /// <summary>
