@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 namespace TinyFeed.Core
@@ -17,24 +18,30 @@ namespace TinyFeed.Core
             EnsureDirectoryExists(fullBlobPath);
             if (File.Exists(fullBlobPath))
                 return;
-            using (var fileStream = File.OpenWrite(fullBlobPath))
+            using (var fileStream = File.Open(fullBlobPath, FileMode.CreateNew, FileAccess.Write, FileShare.None))
                 fileStream.Write(bytes, 0, bytes.Length);
-        }
-
-        private static void EnsureDirectoryExists(string fullBlobPath)
-        {
-            var directoryInfo = Directory.GetParent(fullBlobPath);
-            Directory.CreateDirectory(directoryInfo.FullName);
         }
 
         public Stream Download(string blobPath)
         {
-            return File.OpenRead(GetFullBlobPath(blobPath));
+            return File.Open(GetFullBlobPath(blobPath), FileMode.Open, FileAccess.Read, FileShare.Read);
         }
 
         public bool HasBlob(string blobPath)
         {
             return File.Exists(blobPath);
+        }
+
+        private static void EnsureDirectoryExists(string fullBlobPath)
+        {
+            try
+            {
+                var directoryInfo = Directory.GetParent(fullBlobPath);
+                Directory.CreateDirectory(directoryInfo.FullName);
+            }
+            catch (Exception)
+            {
+            }
         }
 
         private string GetFullBlobPath(string blobPath)
