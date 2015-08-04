@@ -8,7 +8,7 @@ namespace TinyFeed
 {
     public static class UnhandledExceptionLogger
     {
-        internal static readonly ILog Log = LogManager.GetLogger(typeof(UnhandledExceptionLogger));
+        public static readonly ILog Log = LogManager.GetLogger(typeof(UnhandledExceptionLogger));
 
         public static void LogException(Exception exception)
         {

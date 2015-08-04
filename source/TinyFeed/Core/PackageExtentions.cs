@@ -15,9 +15,21 @@ namespace TinyFeed.Core
             return string.Join(", ", elements);
         }
 
-        public static string ToStringOrEmpty<T>(this T value)
+        public static string ToStringSafe<T>(this T value)
         {
-            return value == null ? "" : value.ToString();
+            if (value == null)
+                return "";
+            var stringValue = value.ToString();
+            if (stringValue.Length <= Constraints.MaxStringLength)
+                return stringValue;
+            return stringValue.Substring(0, Constraints.MaxStringLength);
+        }
+
+        public static bool IsTooLargeString(this string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return false;
+            return value.Length > Constraints.MaxStringLength;
         }
     }
 }

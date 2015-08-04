@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using NuGet;
 
 namespace TinyFeed.Core
@@ -14,46 +15,58 @@ namespace TinyFeed.Core
             this.dateTimeService = dateTimeService;
         }
 
-        public Package Build(byte[] bytes)
+        public bool TryBuild(byte[] bytes, out Package package)
         {
-            using (var stream = new MemoryStream(bytes))
+            package = null;
+            try
             {
-                var package = new ZipPackage(stream);
-                var now = dateTimeService.UtcNow;
-                return new Package
+                using (var stream = new MemoryStream(bytes))
                 {
-                    Id = package.Id,
-                    Version = package.Version.ToString(),
-                    DisplayTitle = package.Title.ToStringOrEmpty(),
-                    IsAbsoluteLatestVersion = package.IsAbsoluteLatestVersion,
-                    IsLatestVersion = package.IsLatestVersion,
-                    IsPrerelease = package.IsPrerelease(),
-                    PackageHash = cryptoService.Hash(bytes),
-                    PackageHashAlgorithm = cryptoService.HashAlgorithmId,
-                    PackageSize = bytes.LongLength,
-                    Created = now,
-                    LastUpdated = now,
-                    Published = now,
-                    Owners = package.Owners.Flatten(),
-                    Authors = package.Authors.Flatten(),
-                    Listed = true,
-                    RequireLicenseAcceptance = package.RequireLicenseAcceptance,
-                    Language = package.Language.ToStringOrEmpty(),
-                    DevelopmentDependency = package.DevelopmentDependency,
-                    Title = package.Title.ToStringOrEmpty(),
-                    Tags = package.Tags.ToStringOrEmpty(),
-                    Copyright = package.Copyright.ToStringOrEmpty(),
-                    Dependencies = "",
-                    IconUrl = package.IconUrl.ToStringOrEmpty(),
-                    LicenseUrl = package.LicenseUrl.ToStringOrEmpty(),
-                    ProjectUrl = package.ProjectUrl.ToStringOrEmpty(),
-                    Description = package.Description.ToStringOrEmpty(),
-                    ReleaseNotes = package.ReleaseNotes.ToStringOrEmpty(),
-                    Summary = package.Summary.ToStringOrEmpty(),
-                    DownloadCount = 0,
-                    Score = 0f,
-                    VersionDownloadCount = 0
-                };
+                    var zipPackage = new ZipPackage(stream);
+                    if (zipPackage.Id.IsTooLargeString() || zipPackage.Version.ToString().IsTooLargeString())
+                        return false;
+
+                    var now = dateTimeService.UtcNow;
+                    package = new Package
+                    {
+                        Id = zipPackage.Id,
+                        Version = zipPackage.Version.ToString(),
+                        DisplayTitle = zipPackage.Title.ToStringSafe(),
+                        IsAbsoluteLatestVersion = zipPackage.IsAbsoluteLatestVersion,
+                        IsLatestVersion = zipPackage.IsLatestVersion,
+                        IsPrerelease = zipPackage.IsPrerelease(),
+                        PackageHash = cryptoService.Hash(bytes),
+                        PackageHashAlgorithm = cryptoService.HashAlgorithmId,
+                        PackageSize = bytes.LongLength,
+                        Created = now,
+                        LastUpdated = now,
+                        Published = now,
+                        Owners = zipPackage.Owners.Flatten().ToStringSafe(),
+                        Authors = zipPackage.Authors.Flatten().ToStringSafe(),
+                        Listed = true,
+                        RequireLicenseAcceptance = zipPackage.RequireLicenseAcceptance,
+                        Language = zipPackage.Language.ToStringSafe(),
+                        DevelopmentDependency = zipPackage.DevelopmentDependency,
+                        Title = zipPackage.Title.ToStringSafe(),
+                        Tags = zipPackage.Tags.ToStringSafe(),
+                        Copyright = zipPackage.Copyright.ToStringSafe(),
+                        Dependencies = "".ToStringSafe(),
+                        IconUrl = zipPackage.IconUrl.ToStringSafe(),
+                        LicenseUrl = zipPackage.LicenseUrl.ToStringSafe(),
+                        ProjectUrl = zipPackage.ProjectUrl.ToStringSafe(),
+                        Description = zipPackage.Description.ToStringSafe(),
+                        ReleaseNotes = zipPackage.ReleaseNotes.ToStringSafe(),
+                        Summary = zipPackage.Summary.ToStringSafe(),
+                        DownloadCount = 0,
+                        Score = 0f,
+                        VersionDownloadCount = 0
+                    };
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
     }

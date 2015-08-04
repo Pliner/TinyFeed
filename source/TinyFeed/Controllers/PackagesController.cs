@@ -20,9 +20,9 @@ namespace TinyFeed.Controllers
         private readonly IPackageService packageService;
         private readonly IBlobService blobService;
 
-        public PackagesController(IPackageBuilder packageBuilder, 
-                                  IPackageService packageService, 
-                                  IBlobService blobService)
+        public PackagesController(IPackageBuilder packageBuilder,
+            IPackageService packageService,
+            IBlobService blobService)
         {
             this.packageBuilder = packageBuilder;
             this.packageService = packageService;
@@ -42,6 +42,11 @@ namespace TinyFeed.Controllers
                 ? packageService.FindLatestPackage(id)
                 : packageService.FindPackage(id, version);
 
+            if (package == null)
+            {
+                return new HttpResponseMessage(HttpStatusCode.NotFound);
+            }
+
             var response = Request.CreateResponse(HttpStatusCode.OK);
 
             if (Request.Method == HttpMethod.Get)
@@ -59,7 +64,7 @@ namespace TinyFeed.Controllers
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(DispositionTypeNames.Attachment)
             {
                 FileName = GeFilename(package),
-                CreationDate = package.Created,                                                                 
+                CreationDate = package.Created,
                 ModificationDate = package.LastUpdated
             };
 
@@ -97,17 +102,22 @@ namespace TinyFeed.Controllers
 
                 foreach (var file in provider.FileData)
                 {
-                    using (var fileStream = new FileStream(file.LocalFileName, FileMode.Open, FileAccess.Read, FileShare.Read, 1024 * 1024))
+                    using (var fileStream = new FileStream(file.LocalFileName, FileMode.Open, FileAccess.Read, FileShare.Read, 1024*1024))
                     {
                         var bytes = fileStream.ReadAllBytes();
-                        var package = packageBuilder.Build(bytes);
+                        Package package;
+                        if (!packageBuilder.TryBuild(bytes, out package))
+                        {
+                            return new HttpResponseMessage(HttpStatusCode.BadRequest);
+                        }
+
                         blobService.Upload(GetFilepath(package), bytes);
                         packageService.Add(package);
                     }
                 }
                 return new HttpResponseMessage(HttpStatusCode.OK);
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError);
             }

@@ -25,31 +25,31 @@ namespace TinyFeed.Core
         public void Initialize()
         {
             Database.CreateIfNotExists();
-            Database.ExecuteSqlCommand(@"CREATE TABLE IF NOT EXISTS Packages(
-                    [Id] [nvarchar](64) NOT NULL,
-                    [Version] [nvarchar](64) NOT NULL,
-                    [Title] [nvarchar](64) NOT NULL,
-                    [DisplayTitle] [nvarchar](64) NOT NULL,
-                    [Authors] [nvarchar](64) NOT NULL,
-                    [Owners] [nvarchar](64) NOT NULL,
-                    [IconUrl] [nvarchar](64) NOT NULL,
-                    [LicenseUrl] [nvarchar](64) NOT NULL,
-                    [ProjectUrl] [nvarchar](64) NOT NULL,
+            Database.ExecuteSqlCommand(string.Format(@"CREATE TABLE IF NOT EXISTS Packages(
+                    [Id] [nvarchar]({0}) NOT NULL,
+                    [Version] [nvarchar]({0}) NOT NULL,
+                    [Title] [nvarchar]({0}) NOT NULL,
+                    [DisplayTitle] [nvarchar]({0}) NOT NULL,
+                    [Authors] [nvarchar]({0}) NOT NULL,
+                    [Owners] [nvarchar]({0}) NOT NULL,
+                    [IconUrl] [nvarchar]({0}) NOT NULL,
+                    [LicenseUrl] [nvarchar]({0}) NOT NULL,
+                    [ProjectUrl] [nvarchar]({0}) NOT NULL,
                     [DownloadCount] [int] NOT NULL,
                     [RequireLicenseAcceptance] [bit] NOT NULL,
-                    [Description] [nvarchar](64) NOT NULL,
-                    [Summary] [nvarchar](64) NOT NULL,
-                    [ReleaseNotes] [nvarchar](64) NOT NULL,
-                    [Language] [nvarchar](64) NOT NULL,
+                    [Description] [nvarchar]({0}) NOT NULL,
+                    [Summary] [nvarchar]({0}) NOT NULL,
+                    [ReleaseNotes] [nvarchar]({0}) NOT NULL,
+                    [Language] [nvarchar]({0}) NOT NULL,
                     [Created] [datetime2] NOT NULL,
                     [Published] [datetime2] NOT NULL,
                     [LastUpdated] [datetime2] NOT NULL,
-                    [Dependencies] [nvarchar](64) NOT NULL,
-                    [PackageHash] [nvarchar](64) NOT NULL,
-                    [PackageHashAlgorithm] [nvarchar](64) NOT NULL,
+                    [Dependencies] [nvarchar]({0}) NOT NULL,
+                    [PackageHash] [nvarchar]({0}) NOT NULL,
+                    [PackageHashAlgorithm] [nvarchar]({0}) NOT NULL,
                     [PackageSize] [BIGINT] NOT NULL,
-                    [Copyright] [nvarchar](64) NOT NULL,
-                    [Tags] [nvarchar](64) NOT NULL,
+                    [Copyright] [nvarchar]({0}) NOT NULL,
+                    [Tags] [nvarchar]({0}) NOT NULL,
                     [IsAbsoluteLatestVersion] [bit] NOT NULL,
                     [IsLatestVersion] [bit] NOT NULL,
                     [IsPrerelease] [bit] NOT NULL,
@@ -60,7 +60,7 @@ namespace TinyFeed.Core
                  
                     CONSTRAINT PK_Packages PRIMARY KEY ([Id], [Version]),
                     CONSTRAINT UK_Packages_Id_Version_IsLatestVersion UNIQUE([Id], [Version], [IsLatestVersion])
-                )");
+                )", Constraints.MaxStringLength));
 
             Database.ExecuteSqlCommand(@"CREATE INDEX IF NOT EXISTS IX_Packages_IsLatestVersion ON Packages (`IsLatestVersion` ASC);");
         }

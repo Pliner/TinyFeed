@@ -2,6 +2,6 @@ namespace TinyFeed.Core
 {
     public interface IPackageBuilder
     {
-        Package Build(byte[] bytes);
+        bool TryBuild(byte[] bytes, out Package package);
     }
 }
