@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 
 namespace TinyFeed.Core
 {
-    public class CryptoService : ICryptoService
+    public sealed class CryptoService : ICryptoService
     {
         public string HashAlgorithmId
         {

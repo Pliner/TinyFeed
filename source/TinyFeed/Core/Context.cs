@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace TinyFeed.Core
 {
-    public class Context : DbContext, IContext
+    public sealed class Context : DbContext, IContext
     {
         private static int total;
 

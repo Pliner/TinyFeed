@@ -3,7 +3,7 @@ using NuGet;
 
 namespace TinyFeed.Core
 {
-    public class PackageService : IPackageService
+    public sealed class PackageService : IPackageService
     {
         private readonly IContext context;
         

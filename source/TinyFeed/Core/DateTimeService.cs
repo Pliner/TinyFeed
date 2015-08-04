@@ -2,7 +2,7 @@
 
 namespace TinyFeed.Core
 {
-    public class DateTimeService : IDateTimeService
+    public sealed class DateTimeService : IDateTimeService
     {
         public DateTime UtcNow
         {

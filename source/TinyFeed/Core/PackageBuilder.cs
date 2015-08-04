@@ -3,7 +3,7 @@ using NuGet;
 
 namespace TinyFeed.Core
 {
-    public class PackageBuilder : IPackageBuilder
+    public sealed class PackageBuilder : IPackageBuilder
     {
         private readonly ICryptoService cryptoService;
         private readonly IDateTimeService dateTimeService;

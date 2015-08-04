@@ -2,7 +2,7 @@ using System.IO;
 
 namespace TinyFeed.Core
 {
-    public class BlobService : IBlobService
+    public sealed class BlobService : IBlobService
     {
         private readonly string baseBlobPath;
 

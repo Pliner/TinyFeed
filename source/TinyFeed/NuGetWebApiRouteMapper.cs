@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
@@ -53,49 +52,11 @@ namespace TinyFeed
                                 new { },
                                 new { method = new HttpMethodConstraint(HttpMethod.Put) },
                                 new RedirectHandler(RouteNames.Packages.Upload));
-
-            // redirect e.g. DELETE /api/odata/Foo/1.0 to DELETE /api/packages/Foo/1.0
-            config.Routes.MapHttpRoute(RouteNames.Redirect.Delete,
-                                ODataRoutePath + "/{id}/{version}",
-                                new { },
-                                new { method = new HttpMethodConstraint(HttpMethod.Delete) },
-                                new RedirectHandler(RouteNames.Packages.Delete));
-        }
-
-        [Obsolete("Use overload without routeTemplate")]
-        public void MapNuGetClientRedirectRoutes(HttpConfiguration config, string routeTemplate)
-        {
-            MapNuGetClientRedirectRoutes(config);
         }
 
         public void MapApiRoutes(HttpConfiguration config)
         {
             var routes = config.Routes;
-
-            routes.MapHttpRoute(AspNet.WebApi.HtmlMicrodataFormatter.RouteNames.ApiDocumentation,
-                                pathPrefix,
-                                new { controller = "NuGetDocumentation", action = "GetApiDocumentation" });
-
-            routes.MapHttpRoute(AspNet.WebApi.HtmlMicrodataFormatter.RouteNames.TypeDocumentation,
-                                pathPrefix + "schema/{typeName}",
-                                new { controller = "NuGetDocumentation", action = "GetTypeDocumentation" });
-
-            routes.MapHttpRoute(RouteNames.Indexing,
-                                pathPrefix + "indexing/{action}",
-                                new { controller = "Indexing" });
-
-            routes.MapHttpRoute(RouteNames.TabCompletionPackageIds,
-                                pathPrefix + "v2/package-ids",
-                                new { controller = "TabCompletion", action = "GetMatchingPackages" });
-
-            routes.MapHttpRoute(RouteNames.TabCompletionPackageVersions,
-                                pathPrefix + "v2/package-versions/{packageId}",
-                                new { controller = "TabCompletion", action = "GetPackageVersions" });
-
-            routes.MapHttpRoute(RouteNames.Packages.Search,
-                                pathPrefix + "packages",
-                                new { controller = "Packages", action = "Search" },
-                                new { httpMethod = new HttpMethodConstraint(HttpMethod.Get, HttpMethod.Options) });
 
             routes.MapHttpRoute(RouteNames.Packages.GetAvailableSearchFieldNames,
                                 pathPrefix + "packages/$searchable-fields",
@@ -114,16 +75,6 @@ namespace TinyFeed
             routes.MapHttpRoute(RouteNames.Packages.Download,
                                 pathPrefix + "packages/{id}/{version}/content",
                                 new { controller = "Packages", action = "DownloadPackage" },
-                                new { version = new SemanticVersionConstraint() });
-
-            routes.MapHttpRoute(RouteNames.Packages.Info,
-                                pathPrefix + "packages/{id}/{version}",
-                                new { controller = "Packages", action = "GetPackageInfo", version = RouteParameter.Optional },
-                                new { httpMethod = new HttpMethodConstraint(HttpMethod.Get), version = new OptionalSemanticVersionConstraint() });
-
-            routes.MapHttpRoute(RouteNames.Packages.Delete,
-                                pathPrefix + "packages/{id}/{version}",
-                                new { controller = "Packages", action = "DeletePackage" },
                                 new { version = new SemanticVersionConstraint() });
         }
 
