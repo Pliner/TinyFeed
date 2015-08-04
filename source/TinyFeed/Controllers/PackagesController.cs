@@ -11,9 +11,6 @@ using IPackageBuilder = TinyFeed.Core.IPackageBuilder;
 
 namespace TinyFeed.Controllers
 {
-    /// <summary>
-    /// Provides methods to search, get metadata, download, upload and delete packages.
-    /// </summary>
     public class PackagesController : ApiController
     {
         private readonly IPackageBuilder packageBuilder;
@@ -29,12 +26,6 @@ namespace TinyFeed.Controllers
             this.blobService = blobService;
         }
 
-        /// <summary>
-        /// Downloads the complete <c>.nupkg</c> content. The HTTP HEAD method
-        /// is also supported for verifying package size, and modification date.
-        /// The <c>ETag</c> response header will contain the md5 hash of the
-        /// package content.
-        /// </summary>
         [HttpGet, HttpHead]
         public HttpResponseMessage DownloadPackage(string id, string version = null)
         {
@@ -71,20 +62,6 @@ namespace TinyFeed.Controllers
             return response;
         }
 
-        private static string GetFilepath(Package package)
-        {
-            return Path.Combine(package.Id, GeFilename(package));
-        }
-
-        private static string GeFilename(Package package)
-        {
-            return string.Format("{0}.{1}{2}", package.Id, package.Version, Constants.PackageExtension);
-        }
-
-        /// <summary>
-        /// Upload a package to the repository. If a package already exists
-        /// with the same Id and Version, it will be replaced with the new package.
-        /// </summary>
         [HttpPut]
         [HttpPost]
         public HttpResponseMessage PutPackage(HttpRequestMessage message)
@@ -121,6 +98,16 @@ namespace TinyFeed.Controllers
             {
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError);
             }
+        }
+
+        private static string GetFilepath(Package package)
+        {
+            return Path.Combine(package.Id, GeFilename(package));
+        }
+
+        private static string GeFilename(Package package)
+        {
+            return string.Format("{0}.{1}{2}", package.Id, package.Version, Constants.PackageExtension);
         }
     }
 }
