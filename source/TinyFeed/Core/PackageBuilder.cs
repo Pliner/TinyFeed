@@ -8,11 +8,16 @@ namespace TinyFeed.Core
     {
         private readonly ICryptoService cryptoService;
         private readonly IDateTimeService dateTimeService;
+        private readonly IGuidGenerator guidGenerator;
 
-        public PackageBuilder(ICryptoService cryptoService, IDateTimeService dateTimeService)
+        public PackageBuilder(ICryptoService cryptoService, 
+                              IDateTimeService dateTimeService,
+                              IGuidGenerator guidGenerator
+            )
         {
             this.cryptoService = cryptoService;
             this.dateTimeService = dateTimeService;
+            this.guidGenerator = guidGenerator;
         }
 
         public bool TryBuild(byte[] bytes, out Package package)
@@ -62,7 +67,7 @@ namespace TinyFeed.Core
                         DownloadCount = 0,
                         Score = 0f,
                         VersionDownloadCount = 0,
-                        BlobId = Guid.NewGuid()
+                        BlobId = guidGenerator.NewGuid()
                     };
                     return true;
                 }

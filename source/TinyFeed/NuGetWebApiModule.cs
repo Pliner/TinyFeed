@@ -29,9 +29,10 @@ namespace TinyFeed
             builder.RegisterInstance(routeMapper);
 
             builder.Register(x => new DateTimeService()).As<IDateTimeService>();
+            builder.Register(x => new GuidGenerator()).As<IGuidGenerator>();
             builder.Register(x => new CryptoService()).As<ICryptoService>();
             builder.Register(x => new Context()).As<IContext>().InstancePerRequest();
-            builder.Register(x => new PackageBuilder(x.Resolve<ICryptoService>(), x.Resolve<IDateTimeService>())).As<IPackageBuilder>();
+            builder.Register(x => new PackageBuilder(x.Resolve<ICryptoService>(), x.Resolve<IDateTimeService>(), x.Resolve<IGuidGenerator>())).As<IPackageBuilder>();
             builder.Register(x => new PackageService(x.Resolve<IContext>())).As<IPackageService>();
             builder.Register(x => new BlobService(GetBlobPath())).As<IBlobService>();
 

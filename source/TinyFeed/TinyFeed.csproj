@@ -190,10 +190,12 @@
     <Compile Include="Core\Constraints.cs" />
     <Compile Include="Core\CryptoService.cs" />
     <Compile Include="Core\DateTimeService.cs" />
+    <Compile Include="Core\GuidGenerator.cs" />
     <Compile Include="Core\ICryptoService.cs" />
     <Compile Include="Core\IDateTimeService.cs" />
     <Compile Include="Core\IBlobService.cs" />
     <Compile Include="Core\IContext.cs" />
+    <Compile Include="Core\IGuidGenerator.cs" />
     <Compile Include="Core\IPackageBuilder.cs" />
     <Compile Include="Core\IPackageService.cs" />
     <Compile Include="Core\PackageExtentions.cs" />
