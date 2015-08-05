@@ -70,5 +70,7 @@ namespace TinyFeed.Core
         public int VersionDownloadCount { get; set; }
 
         public float Score { get; set; }
+
+        public Guid BlobId { get; set; }
     }
 }

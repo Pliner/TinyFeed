@@ -1,11 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace TinyFeed.Core
 {
     public interface IBlobService
     {
-        void Upload(string blobPath, byte[] bytes);
-        Stream Download(string blobPath);
-        bool HasBlob(string blobPath);
+        void Upload(string scope, Guid id, byte[] bytes);
+        Stream Download(string scope, Guid id);
+        bool HasBlob(string scope, Guid id);
     }
 }

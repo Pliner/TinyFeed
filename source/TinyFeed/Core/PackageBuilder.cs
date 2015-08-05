@@ -24,7 +24,9 @@ namespace TinyFeed.Core
                 {
                     var zipPackage = new ZipPackage(stream);
                     if (zipPackage.Id.IsTooLargeString() || zipPackage.Version.ToString().IsTooLargeString())
+                    {
                         return false;
+                    }
 
                     var now = dateTimeService.UtcNow;
                     package = new Package
@@ -59,7 +61,8 @@ namespace TinyFeed.Core
                         Summary = zipPackage.Summary.ToStringSafe(),
                         DownloadCount = 0,
                         Score = 0f,
-                        VersionDownloadCount = 0
+                        VersionDownloadCount = 0,
+                        BlobId = Guid.NewGuid()
                     };
                     return true;
                 }

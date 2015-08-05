@@ -42,7 +42,7 @@ namespace TinyFeed.Controllers
 
             if (Request.Method == HttpMethod.Get)
             {
-                response.Content = new StreamContent(blobService.Download(GetFilepath(package)));
+                response.Content = new StreamContent(blobService.Download(GetBlobScope(package), package.BlobId));
             }
             else
             {
@@ -54,7 +54,7 @@ namespace TinyFeed.Controllers
             response.Content.Headers.LastModified = package.LastUpdated;
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(DispositionTypeNames.Attachment)
             {
-                FileName = GeFilename(package),
+                FileName = GetFilename(package),
                 CreationDate = package.Created,
                 ModificationDate = package.LastUpdated
             };
@@ -88,7 +88,7 @@ namespace TinyFeed.Controllers
                             return new HttpResponseMessage(HttpStatusCode.BadRequest);
                         }
 
-                        blobService.Upload(GetFilepath(package), bytes);
+                        blobService.Upload(GetBlobScope(package), package.BlobId, bytes);
                         packageService.Add(package);
                     }
                 }
@@ -100,12 +100,12 @@ namespace TinyFeed.Controllers
             }
         }
 
-        private static string GetFilepath(Package package)
+        private static string GetBlobScope(Package package)
         {
-            return Path.Combine(package.Id, GeFilename(package));
+            return Path.Combine(package.Id, package.Version);
         }
 
-        private static string GeFilename(Package package)
+        private static string GetFilename(Package package)
         {
             return string.Format("{0}.{1}{2}", package.Id, package.Version, Constants.PackageExtension);
         }

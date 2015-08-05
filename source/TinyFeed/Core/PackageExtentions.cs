@@ -18,17 +18,23 @@ namespace TinyFeed.Core
         public static string ToStringSafe<T>(this T value)
         {
             if (value == null)
+            {
                 return "";
+            }
             var stringValue = value.ToString();
             if (stringValue.Length <= Constraints.MaxStringLength)
+            {
                 return stringValue;
+            }
             return stringValue.Substring(0, Constraints.MaxStringLength);
         }
 
         public static bool IsTooLargeString(this string value)
         {
             if (string.IsNullOrEmpty(value))
+            {
                 return false;
+            }
             return value.Length > Constraints.MaxStringLength;
         }
     }

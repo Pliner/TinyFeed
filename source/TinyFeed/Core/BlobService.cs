@@ -12,24 +12,28 @@ namespace TinyFeed.Core
             this.baseBlobPath = baseBlobPath;
         }
 
-        public void Upload(string blobPath, byte[] bytes)
+        public void Upload(string scope, Guid id, byte[] bytes)
         {
-            var fullBlobPath = GetFullBlobPath(blobPath);
+            var fullBlobPath = GetFullBlobPath(scope, id);
             EnsureDirectoryExists(fullBlobPath);
             if (File.Exists(fullBlobPath))
+            {
                 return;
+            }
             using (var fileStream = File.Open(fullBlobPath, FileMode.CreateNew, FileAccess.Write, FileShare.None))
+            {
                 fileStream.Write(bytes, 0, bytes.Length);
+            }
         }
 
-        public Stream Download(string blobPath)
+        public Stream Download(string scope, Guid id)
         {
-            return File.Open(GetFullBlobPath(blobPath), FileMode.Open, FileAccess.Read, FileShare.Read);
+            return File.Open(GetFullBlobPath(scope, id), FileMode.Open, FileAccess.Read, FileShare.Read);
         }
 
-        public bool HasBlob(string blobPath)
+        public bool HasBlob(string scope, Guid id)
         {
-            return File.Exists(blobPath);
+            return File.Exists(GetFullBlobPath(scope, id));
         }
 
         private static void EnsureDirectoryExists(string fullBlobPath)
@@ -44,9 +48,9 @@ namespace TinyFeed.Core
             }
         }
 
-        private string GetFullBlobPath(string blobPath)
+        private string GetFullBlobPath(string scope, Guid id)
         {
-            return Path.Combine(baseBlobPath, blobPath);
+            return Path.Combine(Path.Combine(baseBlobPath, scope), id.ToString());
         }
     }
 }

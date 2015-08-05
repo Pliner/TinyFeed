@@ -57,7 +57,8 @@ namespace TinyFeed.Core
                     [DevelopmentDependency] [bit] NOT NULL,
                     [VersionDownloadCount] [int] NOT NULL,
                     [Score] [float] NOT NULL,
-                 
+                    [BlobId] [nvarchar](36) NOT NULL,
+
                     CONSTRAINT PK_Packages PRIMARY KEY ([Id], [Version]),
                     CONSTRAINT UK_Packages_Id_Version_IsLatestVersion UNIQUE([Id], [Version], [IsLatestVersion])
                 )", Constraints.MaxStringLength));
