@@ -88,6 +88,11 @@ namespace TinyFeed.Controllers
                             return new HttpResponseMessage(HttpStatusCode.BadRequest);
                         }
 
+                        if (packageService.Any(package.Id, package.Version))
+                        {
+                            break;
+                        }
+
                         blobService.Upload(GetBlobScope(package), package.BlobId, bytes);
                         packageService.Add(package);
                     }

@@ -14,10 +14,6 @@ namespace TinyFeed.Core
 
         public void Add(Package package)
         {
-            var existedPackage = context.Packages.SingleOrDefault(x => x.Id == package.Id && x.Version == package.Version);
-            if (existedPackage != null)
-                return;
-
             foreach (var p in context.Packages.Where(x => x.Id == package.Id))
             {
                 p.IsLatestVersion = false;
@@ -34,6 +30,11 @@ namespace TinyFeed.Core
 
             context.Packages.Add(package); 
             context.SaveChanges();
+        }
+
+        public bool Any(string id, string version)
+        {
+            return context.Packages.Any(x => x.Id == id && x.Version == version);
         }
 
         public Package FindLatestPackage(string id)
